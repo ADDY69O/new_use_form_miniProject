@@ -1,41 +1,17 @@
 import React from "react";
-import Logo from "../../Assets/work.webp";
-import LogoSmall from "../../Assets/bigoh-logo-1.webp";
-import { Link } from "react-router-dom";
+import Images from "../../Assets/Images";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import useCustomForm from "../../hook/useCustomForm";
-
-// Validation function
-const validateForm = (input) => {
-  const errors = {};
-  if (!input.email) {
-    errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(input.email)) {
-    errors.email = "Email address is invalid";
-  }
-  if (!input.password) {
-    errors.password = "Password is required ";
-  }
-  if (
-    !(
-      input.password.length >= 8 &&
-      /[a-zA-Z]/.test(input.password) &&
-      /\d/.test(input.password)
-    )
-  ) {
-    errors.password =
-      "Password should be at least 8 characters long and alphanumeric";
-  }
-
-  return errors;
-};
+import { setLocalUserData } from "../Constant/Constant.js";
 
 const Login = () => {
-  const { input, register, handleSubmit, errors } = useCustomForm(
-    { email: "", password: "" },
-    validateForm
-  );
+  const navigate = useNavigate();
+  const { register, handleSubmit, errors } = useCustomForm({
+    email: "",
+    password: "",
+  });
 
   const handleLogin = async (data) => {
     try {
@@ -43,10 +19,9 @@ const Login = () => {
         `${process.env.REACT_APP_API}user/login`,
         data
       );
-      console.log(response);
       toast.success(response.data.message);
-      localStorage.setItem("userInfo", response.data.token);
-      window.location.href = "/home";
+      setLocalUserData(response.data.token);
+      navigate("/home");
     } catch (error) {
       toast.error(error.response.data.message || "Internal Server Error");
     }
@@ -55,11 +30,11 @@ const Login = () => {
   return (
     <div className="w-[100vw] h-[100vh] flex flex-row justify-between items-center">
       <div className="w-[40.4%] max-h-[100vh] bg-[#097FFE] flex flex-col justify-center items-center">
-        <img src={Logo} alt="logo" />
+        <img src={Images.main} alt="logo" />
       </div>
       <div className="w-[60%] h-[100%] flex flex-col justify-center items-center">
         <div className="border-2 rounded-xl border-gray-500 p-4 mr-4">
-          <img src={LogoSmall} alt="bigOh_logo" />
+          <img src={Images.small_Logo} alt="bigOh_logo" />
         </div>
 
         <div className="mt-4 flex flex-col justify-center items-center w-[60%]">
@@ -76,9 +51,14 @@ const Login = () => {
                 type="text"
                 placeholder="Email"
                 name="email"
-                value={input.email}
                 className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 px-2"
-                onChange={register}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Invalid email address",
+                  },
+                })}
               />
               {errors.email && <p className="text-red-500">{errors.email}</p>}
 
@@ -86,9 +66,18 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                value={input.password}
                 className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 mt-4 px-2"
-                onChange={register}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[0-9])/,
+                    message: "Password must be alphanumeric",
+                  },
+                })}
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password}</p>

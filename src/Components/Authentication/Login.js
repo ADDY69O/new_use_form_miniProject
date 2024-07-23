@@ -1,16 +1,19 @@
 import React from "react";
-import Logo from "../../Assets/work.webp";
-import LogoSmall from "../../Assets/bigoh-logo-1.webp";
-import { Link } from "react-router-dom";
+import Images from "../../Assets/Images";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { setLocalUserData } from "../Constant/Constant";
+
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const navigate = useNavigate();
 
   const handleLogin = async (data) => {
     try {
@@ -20,8 +23,8 @@ const Login = () => {
       );
       console.log(response);
       toast.success(response.data.message);
-      localStorage.setItem("userInfo", response.data.token);
-      window.location.href = "/home";
+      setLocalUserData(response.data.token);
+      navigate("/home");
     } catch (error) {
       toast.error(error.response.data.message || "internal Server Error");
     }
@@ -30,14 +33,14 @@ const Login = () => {
   return (
     <div className="w-[100vw] h-[100vh] flex flex-row justify-between items-center ">
       <div className="w-[40.4%] max-h-[100vh] bg-[#097FFE] flex flex-col justify-center items-center ">
-        <img src={Logo} alt="logo" />
+        <img src={Images.main} alt="main-image" />
       </div>
       <div className="w-[60%] h-[100%] flex flex-col justify-center items-center ">
         <div
           className="border-2 rounded-xl border-gray-500 p-4 mr-4
               "
         >
-          <img src={LogoSmall} alt="bigOh_logo" />
+          <img src={Images.small_Logo} alt="bigOh_logo" />
         </div>
 
         <div className="mt-4 flex flex-col justify-center items-center w-[60%] ">
