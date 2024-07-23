@@ -25,7 +25,7 @@ const Input = ({ type, placeholder, className, error, ...props }) => {
         {...props}
       />
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && error.length > 0 && <p className="text-red-500">{error}</p>}
     </>
   );
 };

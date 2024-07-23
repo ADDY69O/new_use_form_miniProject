@@ -50,22 +50,6 @@ const Signup = () => {
 
           <form className="w-full h-full" onSubmit={handleSubmit(handleSignup)}>
             <div className="form flex flex-col justify-center items-center mt-11 w-full h-full">
-              {/* <input
-                type="text"
-                placeholder="Name"
-                className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 items-center px-2"
-                {...register("username", {
-                  required: "Name is required",
-                  minLength: {
-                    value: 2,
-                    message: "Name must be at least 2 characters",
-                  },
-                })}
-              />
-              {errors.username && (
-                <p className="text-red-500">{errors.username}</p>
-              )}
-               */}
               <Input
                 type="text"
                 placeholder="Name"
@@ -80,20 +64,20 @@ const Signup = () => {
                 })}
               />
 
-              <input
+              <Input
                 type="email"
                 placeholder="Email"
                 className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 mt-4 px-2"
+                error={errors.email ? errors.email : ""}
                 {...register("email", {
                   defaultValidation: "email",
                 })}
               />
-              {errors.email && <p className="text-red-500">{errors.email}</p>}
-
-              <input
+              <Input
                 type="tel"
                 placeholder="Phone Number"
                 className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 mt-4 px-2"
+                error={errors.phone ? errors.phone : ""}
                 {...register("phone", {
                   required: "Phone Number is required",
                   minLength: {
@@ -110,12 +94,12 @@ const Signup = () => {
                   },
                 })}
               />
-              {errors.phone && <p className="text-red-500">{errors.phone}</p>}
 
-              <input
+              <Input
                 type="password"
                 placeholder="Password"
                 className="w-[50%] h-10 border-2 border-gray-500 rounded-xl focus:outline-none focus:border-blue-500 mt-4 px-2"
+                error={errors.password ? errors.password : ""}
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -128,9 +112,6 @@ const Signup = () => {
                   },
                 })}
               />
-              {errors.password && (
-                <p className="text-red-500">{errors.password}</p>
-              )}
 
               <button
                 type="submit"

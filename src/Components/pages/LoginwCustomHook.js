@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import useCustomForm from "../../hook/useCustomForm";
 import { setLocalUserData } from "../Constant/Constant.js";
+import Input from "../../Common/Input.js";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const Login = () => {
 
           <form className="w-full h-full" onSubmit={handleSubmit(handleLogin)}>
             <div className="form flex flex-col justify-center items-center mt-11 w-full h-full">
-              <input
+              <Input
                 type="text"
                 placeholder="Email"
                 name="email"
@@ -59,10 +60,10 @@ const Login = () => {
                     message: "Invalid email address",
                   },
                 })}
+                error={errors.email ? errors.email : ""}
               />
-              {errors.email && <p className="text-red-500">{errors.email}</p>}
 
-              <input
+              <Input
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -78,10 +79,8 @@ const Login = () => {
                     message: "Password must be alphanumeric",
                   },
                 })}
+                error={errors.password ? errors.password : ""}
               />
-              {errors.password && (
-                <p className="text-red-500">{errors.password}</p>
-              )}
 
               <button
                 type="submit"

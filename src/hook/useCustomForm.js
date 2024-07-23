@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const useCustomForm = (initialInput) => {
   const [input, setInput] = useState(initialInput);
+  console.log(input);
   const [errors, setErrors] = useState({});
 
   const validateField = (name, value, rules) => {

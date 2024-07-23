@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 const useCustomRefForm = (initialInput) => {
   const inputRefs = useRef(initialInput);
+
   const [errors, setErrors] = useState({});
 
   const ValidationByDefault = {
@@ -15,7 +16,6 @@ const useCustomRefForm = (initialInput) => {
   };
 
   const validateField = (name, value, rules) => {
-    console.log(inputRefs.current);
     let error = "";
     if (rules?.required && !value) {
       error = rules.required;
@@ -47,8 +47,6 @@ const useCustomRefForm = (initialInput) => {
         ? ValidationByDefault[rules.defaultValidation]
         : rules;
 
-    console.log(name, rules);
-
     return {
       name,
       ref: (el) => {
@@ -59,17 +57,21 @@ const useCustomRefForm = (initialInput) => {
       value: inputRefs.current[name]?.value || "",
       onChange: (e) => {
         const value = e.target.value;
-        inputRefs.current[name].value = value;
-        console.log(inputRefs.current);
-        validateField(name, value, rules);
+        if (inputRefs.current[name].value) {
+          inputRefs.current[name].value = value;
+        } else {
+          inputRefs.current[name] = { value: value, rules: validationRule };
+        }
+
+        validateField(name, value, validationRule);
       },
       onFocus: (e) => {
         const value = e.target.value;
-        validateField(name, value, rules);
+        validateField(name, value, validationRule);
       },
       onBlur: (e) => {
         const value = e.target.value;
-        validateField(name, value, rules);
+        validateField(name, value, validationRule);
       },
     };
   };
