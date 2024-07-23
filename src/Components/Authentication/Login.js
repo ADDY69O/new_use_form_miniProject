@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setLocalUserData } from "../Constant/Constant";
+import ApiService from "../../Api/ApiService";
 
 const Login = () => {
   const {
@@ -16,17 +16,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}user/login`,
-        data
-      );
-      console.log(response);
-      toast.success(response.data.message);
-      setLocalUserData(response.data.token);
+    const done = await ApiService.loginUser(data);
+    if (done) {
       navigate("/home");
-    } catch (error) {
-      toast.error(error.response.data.message || "internal Server Error");
     }
   };
 
